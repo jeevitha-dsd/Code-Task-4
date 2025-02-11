@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Learning Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e0f7fa; /* Light cyan background */
+        }
+        header {
+            background-color: #00796b; /* Teal background */
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            padding: 2rem;
+        }
+        .course-list, .progress-tracker, .video-embed, .search-bar {
+            margin-bottom: 2rem;
+            background-color: #fff;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .course-list h2, .progress-tracker h2, .video-embed h2, .search-bar h2 {
+            margin-top: 0;
+            color: #00796b; /* Teal text */
+        }
+        .course-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .course-item:last-child {
+            border-bottom: none;
+        }
+        .course-options button {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+        .course-options button:hover {
+            background-color: #0056b3;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        .progress-bar div {
+            height: 20px;
+            background-color: #4caf50; /* Green progress bar */
+            width: 0%; /* Initial progress */
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .course-list {
+            display: none; /* Hide course listing by default */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>E-Learning Platform</h1>
+    </header>
+    <div class="container">
+        <div class="search-bar">
+            <h2>Search Courses</h2>
+            <input type="text" id="search-input" placeholder="Search for courses..." onkeyup="searchCourses()">
+        </div>
+        <div class="course-list">
+            <h2>Course Listing</h2>
+            <div class="course-item" data-video="https://www.youtube.com/embed/GxmfcnU3feo">
+                <span>Web Development</span>
+                <div class="course-options">
+                    <button onclick="openVideo(this)">View Details</button>
+                    <button onclick="enrollCourse(this)">Enroll</button>
+                </div>
+            </div>
+            <div class="course-item" data-video="https://www.youtube.com/embed/9R3X0JoCLyU">
+                <span>Data Science</span>
+                <div class="course-options">
+                    <button onclick="openVideo(this)">View Details</button>
+                    <button onclick="enrollCourse(this)">Enroll</button>
+                </div>
+            </div>
+            <div class="course-item" data-video="https://www.youtube.com/embed/YRJbhFLLPyE">
+                <span>Data Analytics</span>
+                <div class="course-options">
+                    <button onclick="openVideo(this)">View Details</button>
+                    <button onclick="enrollCourse(this)">Enroll</button>
+                </div>
+            </div>
+        </div>
+        <div class="progress-tracker">
+            <h2>Progress Tracking</h2>
+            <input type="number" id="progress-input" placeholder="Enter progress %" min="0" max="100">
+            <button onclick="updateProgress()">Update Progress</button>
+            <div class="progress-bar">
+                <div id="progress-bar-fill"></div>
+            </div>
+        </div>
+        <div class="video-embed">
+            <h2>Video Embedding</h2>
+            <div class="video-container">
+                <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    <script>
+        function updateProgress() {
+            const progressInput = document.getElementById('progress-input').value;
+            const progressBarFill = document.getElementById('progress-bar-fill');
+            progressBarFill.style.width = progressInput + '%';
+            alert(`Progress Tracking: You have updated your progress to ${progressInput}%.`);
+        }
+
+        function searchCourses() {
+            const input = document.getElementById('search-input').value.toLowerCase();
+            const courseItems = document.querySelectorAll('.course-item');
+            let hasResults = false;
+            courseItems.forEach(item => {
+                const courseName = item.querySelector('span').textContent.toLowerCase();
+                if (courseName.includes(input)) {
+                    item.style.display = '';
+                    hasResults = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            document.querySelector('.course-list').style.display = hasResults ? 'block' : 'none';
+        }
+
+        function openVideo(button) {
+            const courseItem = button.closest('.course-item');
+            const videoUrl = courseItem.getAttribute('data-video');
+            const videoFrame = document.getElementById('video-frame');
+            videoFrame.src = videoUrl;
+        }
+
+        function enrollCourse(button) {
+            const courseItem = button.closest('.course-item');
+            const videoUrl = courseItem.getAttribute('data-video');
+            window.open(videoUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
